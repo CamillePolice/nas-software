@@ -1,0 +1,102 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run go",
+            "type": "shell",
+            "command": "air",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-api/"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run go test",
+            "type": "shell",
+            "command": "go test ./tests -v",
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Start Dev Server",
+            "type": "npm",
+            "script": "dev",
+            "detail": "Runs the Vite development server",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Build Project",
+            "type": "npm",
+            "script": "build",
+            "detail": "Runs type-check, then builds the project using Vite",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Preview Build",
+            "type": "npm",
+            "script": "preview",
+            "detail": "Previews the production build using Vite",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Build Only",
+            "type": "npm",
+            "script": "build-only",
+            "detail": "Builds the project using Vite without type-check",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Type Check",
+            "type": "npm",
+            "script": "type-check",
+            "detail": "Performs TypeScript type-checking using vue-tsc",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Lint",
+            "type": "npm",
+            "script": "lint",
+            "detail": "Lints the codebase with ESLint and fixes issues where possible",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        },
+        {
+            "label": "Format Code",
+            "type": "npm",
+            "script": "format",
+            "detail": "Formats code using Prettier",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-converter-app"
+            }
+        }
+    ]
+}

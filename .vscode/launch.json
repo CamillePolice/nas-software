@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug with Air",
+            "type": "go",
+            "request": "attach",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/file-converter-api",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "showLog": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug front [chrome]",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/file-converter-app"
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Debug front [Edge]",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/file-converter-app"
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Debug front [Firefox]",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/file-converter-appopvigil-frontend"
+        }
+    ]
+}
