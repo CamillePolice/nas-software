@@ -77,7 +77,7 @@
         "type=bind,source=${localWorkspaceFolder},target=/home/vscode/.ssh/",
         "type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/vscode/.ssh/,readonly"
     ],
-    "postCreateCommand": "go version && npm --version && pnpm --version"
+    "postCreateCommand": "go version && npm --version && pnpm --version && pnpm setup && source ~/.bashrc"
     // Features to add to the dev container. More info: https://containers.dev/features.
     // "features": {},
     // Configure tool-specific properties.
