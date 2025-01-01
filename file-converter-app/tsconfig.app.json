@@ -16,6 +16,9 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true
   }
 }

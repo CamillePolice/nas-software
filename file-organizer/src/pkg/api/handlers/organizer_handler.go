@@ -23,7 +23,7 @@ type OrganizerHandler struct {
 // It initializes the handler with the default bin directory
 func NewOrganizerHandler() *OrganizerHandler {
 	return &OrganizerHandler{
-		binDir: "bin",
+		binDir: "../bin",
 	}
 }
 
@@ -41,28 +41,19 @@ func NewOrganizerHandler() *OrganizerHandler {
 // build environment, and executes the go build command with the specified parameters.
 func (h *OrganizerHandler) buildBinary(platform types.OS, arch types.Arch) (string, error) {
 
-	fmt.Println("dedezsd")
-	if err := os.MkdirAll(h.binDir, 0755); err != nil {
-		return "", fmt.Errorf("failed to create bin directory: %w", err)
+	binaryPath, err := h.getBinaryPath(platform, arch)
+
+	if err != nil {
+		return "", err
 	}
 
-	// Define binary name based on OS
-	binaryName := "file-organizer"
+	cmd := exec.Command("go", "build", "-o", binaryPath, "./main.go")
 
-	if platform == "windows" {
-		binaryName += ".exe"
-	}
-
-	binaryPath := filepath.Join(h.binDir, fmt.Sprintf("%s-%s-%s", binaryName, platform, arch))
-
-	// Set up build command with appropriate environment variables
-	cmd := exec.Command("go", "build", "-o", binaryPath, "./cmd/cli/main.go")
 	cmd.Env = append(os.Environ(),
 		fmt.Sprintf("GOOS=%s", platform),
 		fmt.Sprintf("GOARCH=%s", arch),
 	)
 
-	fmt.Println("Test")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
@@ -72,6 +63,20 @@ func (h *OrganizerHandler) buildBinary(platform types.OS, arch types.Arch) (stri
 	}
 
 	return binaryPath, nil
+}
+
+func (h *OrganizerHandler) getBinaryPath(platform types.OS, arch types.Arch) (string, error) {
+	if err := os.MkdirAll(h.binDir, 0755); err != nil {
+		return "", fmt.Errorf("failed to create bin directory: %w", err)
+	}
+
+	binaryName := os.Getenv("BINARY_NAME")
+	extension := ""
+	if platform == types.Windows {
+		extension = ".exe"
+	}
+
+	return filepath.Join(h.binDir, fmt.Sprintf("%s-%s-%s%s", binaryName, platform, arch, extension)), nil
 }
 
 // GetWindowsBinary handles requests for the Windows version of the file organizer
@@ -84,13 +89,28 @@ func (h *OrganizerHandler) buildBinary(platform types.OS, arch types.Arch) (stri
 // Route: GET /binary/windows
 func (h *OrganizerHandler) GetWindowsBinary(c echo.Context) error {
 	binaryPath, err := h.buildBinary(types.Windows, types.AMD64)
+
+	fmt.Println("BinaryPath", binaryPath)
+
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, types.Response{
 			Error: err.Error(),
 		})
 	}
 
-	return c.Attachment(binaryPath, filepath.Base(binaryPath))
+	// Read the binary file
+	binary, err := os.ReadFile(binaryPath)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, types.Response{
+			Error: "Failed to read binary",
+		})
+	}
+
+	// Send both binary and filename
+	return c.JSON(http.StatusOK, types.BinaryResponse{
+		Binary:   binary,
+		Filename: filepath.Base(binaryPath),
+	})
 }
 
 // GetLinuxBinary handles requests for the Linux version of the file organizer

@@ -21,7 +21,7 @@ func ConfigureRoutes(e *echo.Echo) {
 	}
 
 	// Binary group
-	binary := e.Group("/binary")
+	binary := e.Group("/api/binary")
 	{
 		binary.GET("/windows", h.GetWindowsBinary)
 		binary.GET("/linux", h.GetLinuxBinary)

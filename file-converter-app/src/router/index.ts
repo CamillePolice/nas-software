@@ -1,22 +1,35 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
-import Home from '@/views/Home.vue'
-import FileConverter from '@/components/FileConverter.vue'
+import FileConverterView from '../views/FileConverterView.vue'
+import HomeView from '../views/HomeView.vue'
+import FileOrganizerView from '@/views/FileOrganizerView.vue'
 import type { FileNativType, FileType } from '@/enum/file.enum'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: HomeView,
   },
   {
-    path: '/converter', // Removed :type parameter
+    path: '/converter',
     name: 'converter',
-    component: FileConverter,
-    props: (route: RouteLocationNormalized) => ({
-      source: Number(route.query.source) as FileNativType, // Convert string to number
-      dest: route.query.dest as FileType,
-    }),
+    component: FileConverterView,
+    children: [
+      {
+        path: '',
+        name: 'converter-default',
+        component: () => import('@/components/FileConverter.vue'),
+        props: (route: RouteLocationNormalized) => ({
+          source: Number(route.query.source) as FileNativType,
+          dest: route.query.dest as FileType,
+        }),
+      },
+    ],
+  },
+  {
+    path: '/organizer',
+    name: 'organizer',
+    component: FileOrganizerView,
   },
 ]
 
