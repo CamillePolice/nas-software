@@ -43,7 +43,7 @@
             }
         },
         {
-            "label": "Start Dev Server",
+            "label": "Start Dev Server [App]",
             "type": "npm",
             "script": "dev",
             "detail": "Runs the Vite development server",
@@ -53,7 +53,7 @@
             }
         },
         {
-            "label": "Build Project",
+            "label": "Build Project [App]",
             "type": "npm",
             "script": "build",
             "detail": "Runs type-check, then builds the project using Vite",
@@ -63,7 +63,7 @@
             }
         },
         {
-            "label": "Preview Build",
+            "label": "Preview Build [App]",
             "type": "npm",
             "script": "preview",
             "detail": "Previews the production build using Vite",
@@ -73,7 +73,7 @@
             }
         },
         {
-            "label": "Build Only",
+            "label": "Build Only [App]",
             "type": "npm",
             "script": "build-only",
             "detail": "Builds the project using Vite without type-check",
@@ -83,7 +83,7 @@
             }
         },
         {
-            "label": "Type Check",
+            "label": "Type Check [App]",
             "type": "npm",
             "script": "type-check",
             "detail": "Performs TypeScript type-checking using vue-tsc",
@@ -93,7 +93,7 @@
             }
         },
         {
-            "label": "Lint",
+            "label": "Lint [App]",
             "type": "npm",
             "script": "lint",
             "detail": "Lints the codebase with ESLint and fixes issues where possible",
@@ -103,7 +103,7 @@
             }
         },
         {
-            "label": "Format Code",
+            "label": "Format Code [App]",
             "type": "npm",
             "script": "format",
             "detail": "Formats code using Prettier",
