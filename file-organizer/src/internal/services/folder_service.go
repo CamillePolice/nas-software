@@ -1,7 +1,7 @@
 package services
 
 import (
-	"file-organizer/src/models"
+	"file-organizer/src/pkg/types"
 	"fmt"
 	"net/http"
 	"os"
@@ -15,8 +15,8 @@ func NewFolderService() *FolderService {
 	return &FolderService{}
 }
 
-func (fs *FolderService) GetAllFiles(path string) ([]models.File, error) {
-	var files []models.File
+func (fs *FolderService) GetAllFiles(path string) ([]types.File, error) {
+	var files []types.File
 	folderPath := path
 
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
@@ -42,7 +42,7 @@ func (fs *FolderService) GetAllFiles(path string) ([]models.File, error) {
 			return nil
 		}
 
-		file := models.File{
+		file := types.File{
 			Name:      info.Name(),
 			Extension: strings.TrimPrefix(filepath.Ext(info.Name()), "."),
 			Size:      info.Size(),
@@ -62,8 +62,8 @@ func (fs *FolderService) GetAllFiles(path string) ([]models.File, error) {
 	return files, nil
 }
 
-func (fs *FolderService) GetFolderTypesPaths() models.FolderTypesPaths {
-	return models.FolderTypesPaths{
+func (fs *FolderService) GetFolderTypesPaths() types.FolderTypesPaths {
+	return types.FolderTypesPaths{
 		Paths: map[string]string{
 			"Images":    "Images",
 			"Videos":    "Videos",
@@ -91,7 +91,7 @@ func (fs *FolderService) PrepareFolders(path string) {
 	}
 }
 
-func (fs *FolderService) moveToFolder(path string, file models.File, fileType string) {
+func (fs *FolderService) moveToFolder(path string, file types.File, fileType string) {
 	folderTypesPaths := fs.GetFolderTypesPaths()
 
 	oldPath := filepath.Join(path, file.Name)

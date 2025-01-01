@@ -1,7 +1,7 @@
 package services
 
 import (
-	"file-organizer/src/models"
+	"file-organizer/src/pkg/types"
 	"fmt"
 	"log"
 	"mime"
@@ -18,7 +18,7 @@ type OrganizerService struct {
 }
 
 type FileTask struct {
-	file models.File
+	file types.File
 	path string
 }
 
@@ -36,7 +36,7 @@ func NewOrganizerService(fileService *FileService, folderService *FolderService)
 	}
 }
 
-func (org *OrganizerService) OrganizeFiles(files []models.File, path string) error {
+func (org *OrganizerService) OrganizeFiles(files []types.File, path string) error {
 	fileTypes := org.fileService.GetFileTypes()
 	tasks := make(chan FileTask, len(files))
 	stats := &Stats{}
@@ -59,7 +59,7 @@ func (org *OrganizerService) OrganizeFiles(files []models.File, path string) err
 	return nil
 }
 
-func (org *OrganizerService) fileWorker(tasks chan FileTask, fileTypes models.FileTypes, wg *sync.WaitGroup, stats *Stats) {
+func (org *OrganizerService) fileWorker(tasks chan FileTask, fileTypes types.FileTypes, wg *sync.WaitGroup, stats *Stats) {
 	defer wg.Done()
 
 	for task := range tasks {
@@ -77,7 +77,7 @@ func (org *OrganizerService) fileWorker(tasks chan FileTask, fileTypes models.Fi
 	}
 }
 
-func (org *OrganizerService) DetectFileType(file models.File, fileTypes models.FileTypes) string {
+func (org *OrganizerService) DetectFileType(file types.File, fileTypes types.FileTypes) string {
 	// Try MIME type detection first
 	mimeType := mime.TypeByExtension(filepath.Ext(file.Name))
 	if mimeType != "" {
@@ -114,7 +114,7 @@ func (org *OrganizerService) DetectFileType(file models.File, fileTypes models.F
 	return "Others"
 }
 
-func (org *OrganizerService) moveFile(path string, file models.File, fileType string) error {
+func (org *OrganizerService) moveFile(path string, file types.File, fileType string) error {
 	const maxRetries = 3
 	var err error
 
@@ -131,7 +131,7 @@ func (org *OrganizerService) moveFile(path string, file models.File, fileType st
 	return fmt.Errorf("failed to move file after %d attempts: %v", maxRetries, err)
 }
 
-func (org *OrganizerService) attemptMove(path string, file models.File, fileType string) error {
+func (org *OrganizerService) attemptMove(path string, file types.File, fileType string) error {
 	oldPath := filepath.Join(path, file.Name)
 	newPath := filepath.Join(path, org.folderService.GetFolderTypesPaths().Paths[fileType], file.Name)
 

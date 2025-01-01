@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run go",
+            "label": "Start dev [File organizer API]",
             "type": "shell",
             "command": "air",
             "args": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-api/"
+                "cwd": "${workspaceFolder}/file-organizer/src/cmd/api"
             },
             "problemMatcher": [],
             "group": {
@@ -16,11 +16,25 @@
             }
         },
         {
-            "label": "Run go test",
+            "label": "Start dev [File organizer binary]",
+            "type": "shell",
+            "command": "air",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/file-organizer/src/cmd/cli"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run tests [File organizer}",
             "type": "shell",
             "command": "go test ./tests -v",
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}/src/internal"
             },
             "problemMatcher": [],
             "group": {

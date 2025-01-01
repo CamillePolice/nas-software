@@ -1,0 +1,36 @@
+root = "."
+tmp_dir = "tmp"
+
+[
+build
+]
+# Add any CLI flags you need here
+cmd = "go build -o ./tmp/main ."
+bin = "./tmp/main -path ./test-folder"  # Specify your default path here
+full_bin = "./tmp/main -path ./test-folder"
+include_ext = ["go"]
+exclude_dir = ["assets", "tmp", "vendor"]
+include_dir = []
+exclude_file = []
+delay = 1000
+stop_on_error = true
+send_interrupt = false
+kill_delay = 500
+
+[
+log
+]
+time = false
+
+[
+color
+]
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[
+misc
+]
+clean_on_exit = true

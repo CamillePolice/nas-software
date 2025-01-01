@@ -1,7 +1,7 @@
 package services
 
 import (
-	"file-organizer/src/models"
+	"file-organizer/src/pkg/types"
 )
 
 type FileService struct{}
@@ -10,8 +10,8 @@ func NewFileService() *FileService {
 	return &FileService{}
 }
 
-func (fs *FileService) GetFileTypes() models.FileTypes {
-	return models.FileTypes{
+func (fs *FileService) GetFileTypes() types.FileTypes {
+	return types.FileTypes{
 		Images:    fs.createSet("jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp", "svg", "raw", "heic"),
 		Videos:    fs.createSet("mp4", "avi", "mkv", "mov", "wmv", "flv", "webm", "m4v", "mpeg"),
 		Archives:  fs.createSet("zip", "rar", "7z", "tar", "gz", "bz2"),

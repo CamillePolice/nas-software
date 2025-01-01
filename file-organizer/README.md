@@ -1,49 +1,146 @@
-# Go Development Container
+# File Organizer API Documentation
 
-This project provides a development container for building and running Go applications. It includes a pre-configured environment with all necessary tools and dependencies.
+## Overview
+The File Organizer API provides endpoints to build and download platform-specific binaries of the file organizer tool. The API supports Windows, Linux, and macOS platforms.
 
-## Project Structure
-
+## Base URL
 ```
-go-dev-container
-├── .devcontainer
-│   ├── devcontainer.json       # Configuration for the development container
-│   └── Dockerfile              # Docker image definition
-├── src
-│   └── main.go                 # Entry point of the Go application
-└── README.md                   # Project documentation
+http://localhost:8080
 ```
 
-## Getting Started
+## Endpoints
 
-To get started with this project, follow these steps:
+### Health Check
+Get the API health status.
 
-1. **Clone the Repository**
-   ```
-   git clone <repository-url>
-   cd go-dev-container
-   ```
+```
+GET /health
+```
 
-2. **Open in Development Container**
-   Open the project in your code editor and use the command to reopen in the development container. This will set up the environment as specified in the `.devcontainer` folder.
+**Response**
+```json
+{
+    "status": "healthy"
+}
+```
 
-3. **Build the Application**
-   Once inside the container, navigate to the `src` directory and build the application:
-   ```
-   cd src
-   go build
-   ```
+### Binary Downloads
 
-4. **Run the Application**
-   After building, you can run the application:
-   ```
-   go run main.go
-   ```
+#### Get Windows Binary
+Build and download the Windows version of the file organizer.
 
-## Usage
+```
+GET /binary/windows
+```
 
-You can modify the `main.go` file to implement your application logic. The development container will provide all necessary tools for Go development, including linting and formatting.
+**Response**
+- Content-Type: application/octet-stream
+- Content-Disposition: attachment; filename=file-organizer-windows-amd64.exe
 
-## Contributing
+**Error Response**
+```json
+{
+    "error": "error message"
+}
+```
 
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
+#### Get Linux Binary
+Build and download the Linux version of the file organizer.
+
+```
+GET /binary/linux
+```
+
+**Response**
+- Content-Type: application/octet-stream
+- Content-Disposition: attachment; filename=file-organizer-linux-amd64
+
+**Error Response**
+```json
+{
+    "error": "error message"
+}
+```
+
+#### Get macOS Binary
+Build and download the macOS version of the file organizer.
+
+```
+GET /binary/mac
+```
+
+**Response**
+- Content-Type: application/octet-stream
+- Content-Disposition: attachment; filename=file-organizer-darwin-amd64
+
+**Error Response**
+```json
+{
+    "error": "error message"
+}
+```
+
+## Response Codes
+- **200 OK**: Request successful
+- **500 Internal Server Error**: Build failed or internal error occurred
+
+## Example Usage
+
+### Using cURL
+
+Download Windows binary:
+```bash
+curl -OJ http://localhost:8080/binary/windows
+```
+
+Download Linux binary:
+```bash
+curl -OJ http://localhost:8080/binary/linux
+```
+
+Download macOS binary:
+```bash
+curl -OJ http://localhost:8080/binary/mac
+```
+
+### Using wget
+
+```bash
+wget http://localhost:8080/binary/windows
+wget http://localhost:8080/binary/linux
+wget http://localhost:8080/binary/mac
+```
+
+## Implementation Details
+
+### Binary Build Process
+- Binaries are built on-demand when requested
+- Built using `go build` with appropriate GOOS and GOARCH settings
+- Stored in a `bin` directory with platform-specific naming
+- Windows binaries include `.exe` extension
+
+### File Structure
+```
+bin/
+├── file-organizer-windows-amd64.exe
+├── file-organizer-linux-amd64
+└── file-organizer-darwin-amd64
+```
+
+## Error Handling
+All endpoints return JSON error responses in the following format:
+```json
+{
+    "error": "Detailed error message"
+}
+```
+
+Common errors:
+- Failed to create bin directory
+- Build command failed
+- Invalid platform specified
+
+## Notes
+- All binaries are built for amd64 architecture
+- Binaries are built fresh for each request
+- Build process may take a few seconds depending on the system

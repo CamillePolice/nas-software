@@ -1,0 +1,44 @@
+# file-organizer/cmd/api/.air.toml
+root = "../.."  # Go back two directories to reach project root
+tmp_dir = "cmd/api/tmp"  # Store tmp files in api directory
+
+[build]
+# Build the API from project root
+cmd = "go build -o ./cmd/api/tmp/main ."
+bin = "cmd/api/tmp/main"
+full_bin = "cmd/api/tmp/main"
+
+# Extensions to watch
+include_ext = ["go", "tpl", "tmpl", "html"]
+
+# Watch all project directories
+include_dir = [
+    "cmd",
+    "internal",
+    "pkg",
+    "handlers"
+]
+
+# Directories to exclude
+exclude_dir = ["bin", "tmp", "vendor"]
+exclude_file = []
+exclude_regex = ["_test.go"]
+exclude_unchanged = false  # Set to false to ensure reloading
+follow_symlink = true
+log = "air.log"
+delay = 0  # Reduce delay to make reload faster
+stop_on_error = true
+send_interrupt = false
+kill_delay = 500 # ms
+
+[log]
+time = true  # Enable timestamps in logs to better track changes
+
+[color]
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[misc]
+clean_on_exit = true

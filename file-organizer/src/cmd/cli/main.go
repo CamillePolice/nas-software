@@ -1,7 +1,7 @@
 package main
 
 import (
-	"file-organizer/src/services"
+	"file-organizer/src/internal/services"
 	"flag"
 	"fmt"
 	"os"
