@@ -1,0 +1,5 @@
+{
+    "vetur.validation.template": true,
+    "vetur.experimental.templateInterpolationService": true,
+    "vetur.config.rootPath": "/workspaces/nas-software/file-converter-app"
+}

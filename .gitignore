@@ -1,2 +1,3 @@
 # Ignore pnpm store directory
 .pnpm-store/
+file-organizer/src/cmd/bin/
