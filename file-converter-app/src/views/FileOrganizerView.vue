@@ -10,20 +10,10 @@
             <div class="download-card">
                 <div class="card-content">
                     <div class="icon-wrapper windows">
-                        <i class="fab fa-windows"></i>
+                        <i class="pi pi-microsoft"></i>
                     </div>
                     <h2>Windows Version</h2>
                     <p>Download the Windows version of the application</p>
-                    <div class="file-info">
-                        <div class="info-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <span>25MB</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-file-archive"></i>
-                            <span>.zip</span>
-                        </div>
-                    </div>
                     <button class="download-button" @click="downloadArchive(OS.WINDOWS)"
                         :disabled="downloading.documentation">
                         <i class="fas fa-download"></i>
@@ -36,20 +26,10 @@
             <div class="download-card">
                 <div class="card-content">
                     <div class="icon-wrapper apple">
-                        <i class="fab fa-apple"></i>
+                        <i class="pi pi-apple"></i>
                     </div>
                     <h2>macOS Version</h2>
                     <p>Download the macOS version of the application</p>
-                    <div class="file-info">
-                        <div class="info-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <span>50MB</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-file-archive"></i>
-                            <span>.zip</span>
-                        </div>
-                    </div>
                     <button class="download-button" @click="downloadArchive(OS.MAX)" :disabled="downloading.source">
                         <i class="fas fa-download"></i>
                         <span>{{ downloading.source ? 'Downloading...' : 'Download' }}</span>
@@ -58,27 +38,20 @@
             </div>
 
             <!-- Archive 3 -->
-            <div class="download-card">
-                <div class="card-content">
-                    <div class="icon-wrapper linux">
-                        <i class="fab fa-linux"></i>
-                    </div>
-                    <h2>Linux Version</h2>
-                    <p>Download the Linux version of the application</p>
-                    <div class="file-info">
-                        <div class="info-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <span>100MB</span>
+            <div class="col-span-2 flex justify-center">
+                <div class="download-card" style="width: calc(50% - 1rem)">
+                    <div class="card-content">
+                        <div class="icon-wrapper linux">
+                            <font-awesome-icon :icon="['fab', 'linux']" />
                         </div>
-                        <div class="info-item">
-                            <i class="fas fa-file-archive"></i>
-                            <span>.zip</span>
-                        </div>
+                        <h2>Linux Version</h2>
+                        <p>Download the Linux version of the application</p>
+                        <button class="download-button" @click="downloadArchive(OS.LINUX)"
+                            :disabled="downloading.media">
+                            <i class="fas fa-linux"></i>
+                            <span>{{ downloading.media ? 'Downloading...' : 'Download' }}</span>
+                        </button>
                     </div>
-                    <button class="download-button" @click="downloadArchive(OS.LINUX)" :disabled="downloading.media">
-                        <i class="fas fa-download"></i>
-                        <span>{{ downloading.media ? 'Downloading...' : 'Download' }}</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -89,6 +62,7 @@
 import { ref } from 'vue'
 import { OS } from '@/types/enum/os.enum';
 import { FileOrganizerService } from '../services/file-organizer.service';
+import { useToast } from 'primevue';
 
 const fileOrganizerService = new FileOrganizerService();
 
@@ -98,63 +72,38 @@ const downloading = ref({
     media: false
 })
 
+const toast = useToast()
+
 const downloadArchive = async (targetOS: OS) => {
     downloading.value[targetOS] = true
 
     fileOrganizerService.retrieveOrganizerBinary(targetOS).then(response => {
-        console.log("LOG || fileOrganizerService.retrieveOrganizerBinary || response ->", response)
-        // Create a blob from the binary data
-        const blob = new Blob([response.binary])
 
-        // Create a URL for the blob
+        const blob = new Blob([response.binary], {
+            type: 'application/octet-stream'
+        })
         const url = window.URL.createObjectURL(blob)
-
-        // Create a temporary link element
         const link = document.createElement('a')
-        link.href = url
 
-        // Set the download filename (adjust based on your OS)
-        const filename = `file-organizer-${targetOS}`
+        link.href = url
         link.download = response.filename
 
-        // Append to document, click, and cleanup
         document.body.appendChild(link)
         link.click()
-
-        // Clean up
         window.URL.revokeObjectURL(url)
         document.body.removeChild(link)
-    }).catch(error => {
-        console.error('Download failed:', error)
+
+        downloading.value[targetOS] = false
+    }).catch(() => {
+        toast.add({
+            severity: 'error',
+            summary: 'Download Failed',
+            detail: 'Unable to download the file. Please try again.',
+            life: 3000
+        })
+        downloading.value[targetOS] = false
     })
 
-    downloading.value[targetOS] = false
-
-    // try {
-
-
-
-    //     // const blob = await response.blob()
-
-    //     // // Create download link
-    //     // const url = window.URL.createObjectURL(blob)
-    //     // const link = document.createElement('a')
-    //     // link.href = url
-    //     // link.download = `${type}-archive.zip`
-
-    //     // // Trigger download
-    //     // document.body.appendChild(link)
-    //     // link.click()
-    //     // document.body.removeChild(link)
-
-    //     // // Cleanup
-    //     // window.URL.revokeObjectURL(url)
-    // } catch (error) {
-    //     console.error(`Error downloading ${type} archive:`, error)
-    //     alert(`Failed to download ${type} archive. Please try again.`)
-    // } finally {
-    //     downloading.value[type] = false
-    // }
 }
 </script>
 
@@ -189,7 +138,8 @@ const downloadArchive = async (targetOS: OS) => {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    /* Change this line */
     gap: 2rem;
     padding: 1rem;
 }
@@ -241,6 +191,7 @@ const downloadArchive = async (targetOS: OS) => {
 .icon-wrapper.linux {
     background: linear-gradient(135deg, #FFA500 0%, #FF6B00 100%);
     box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+    font-size: 30px;
 }
 
 .download-card:hover .icon-wrapper {
