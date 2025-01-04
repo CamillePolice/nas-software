@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 interface BinaryResponse {
-    binary: ArrayBuffer
-    filename: string
+    binary: string
+    archiveName: string
 }
 
 export class FileOrganizerService {

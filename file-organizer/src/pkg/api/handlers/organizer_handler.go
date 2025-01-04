@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"archive/zip"
 	"bytes"
 	"file-organizer/src/pkg/types"
 	"fmt"
@@ -84,6 +85,33 @@ func (h *OrganizerHandler) getBinaryPath(platform types.OS, arch types.Arch) (st
 	return filepath.Join(h.binDir, fmt.Sprintf("%s-%s-%s%s", binaryName, platform, arch, extension)), nil
 }
 
+// addReadmeToZip adds the README file to the provided zip writer
+//
+// Parameters:
+//   - w: zip writer to add the README to
+//
+// Returns:
+//   - error: any error that occurred during the process
+//
+// This function reads the README file from the assets directory and adds it to the zip archive
+func (h *OrganizerHandler) addReadmeToZip(w *zip.Writer) error {
+	readmeContent, err := os.ReadFile("../../assets/ReadMe.md")
+	if err != nil {
+		return fmt.Errorf("failed to read README file: %w", err)
+	}
+
+	readmeWriter, err := w.Create("README.md")
+	if err != nil {
+		return fmt.Errorf("failed to create README in archive: %w", err)
+	}
+
+	if _, err := readmeWriter.Write(readmeContent); err != nil {
+		return fmt.Errorf("failed to write README to archive: %w", err)
+	}
+
+	return nil
+}
+
 // getBinaryResponse is a helper function that builds and prepares binary response
 //
 // Parameters:
@@ -97,19 +125,70 @@ func (h *OrganizerHandler) getBinaryPath(platform types.OS, arch types.Arch) (st
 // This function handles the building of the binary and preparation of the response
 // including reading the binary data and setting up the response structure
 func (h *OrganizerHandler) getBinaryResponse(platform types.OS, arch types.Arch) (types.BinaryResponse, error) {
+	fmt.Println("Starting zip creation...")
+
+	// Create a buffer to write our archive to
+	buf := new(bytes.Buffer)
+
+	// Create a new zip archive
+	w := zip.NewWriter(buf)
+
+	// First, get and add the binary
 	binaryPath, err := h.buildBinary(platform, arch)
 	if err != nil {
 		return types.BinaryResponse{}, err
 	}
+	fmt.Printf("Binary path: %s\n", binaryPath)
 
 	binary, err := os.ReadFile(binaryPath)
 	if err != nil {
 		return types.BinaryResponse{}, fmt.Errorf("failed to read binary: %w", err)
 	}
+	fmt.Printf("Binary size: %d bytes\n", len(binary))
+
+	// Add binary to zip with its base filename
+	binaryName := filepath.Base(binaryPath)
+	fmt.Printf("Adding binary to zip as: %s\n", binaryName)
+
+	binaryWriter, err := w.Create(binaryName)
+	if err != nil {
+		return types.BinaryResponse{}, fmt.Errorf("failed to create binary in archive: %w", err)
+	}
+
+	written, err := binaryWriter.Write(binary)
+	if err != nil {
+		return types.BinaryResponse{}, fmt.Errorf("failed to write binary to archive: %w", err)
+	}
+	fmt.Printf("Wrote %d bytes of binary to zip\n", written)
+
+	// Add README to zip
+	fmt.Println("Adding README to zip...")
+	if err := h.addReadmeToZip(w); err != nil {
+		return types.BinaryResponse{}, fmt.Errorf("failed to add README to archive: %w", err)
+	}
+
+	// Important: Close the zip writer before reading the buffer
+	fmt.Println("Closing zip writer...")
+	err = w.Close()
+	if err != nil {
+		return types.BinaryResponse{}, fmt.Errorf("failed to close zip writer: %w", err)
+	}
+
+	// Get the bytes after closing the writer
+	zipBytes := buf.Bytes()
+	fmt.Printf("Final zip size: %d bytes\n", len(zipBytes))
+
+	// Verify the zip is not empty
+	if len(zipBytes) == 0 {
+		return types.BinaryResponse{}, fmt.Errorf("generated zip archive is empty")
+	}
+
+	archiveName := fmt.Sprintf("file-organizer-%s-%s.zip", platform, arch)
+	fmt.Printf("Returning zip with name: %s\n", archiveName)
 
 	return types.BinaryResponse{
-		Binary:   binary,
-		Filename: filepath.Base(binaryPath),
+		Binary:      zipBytes,
+		ArchiveName: archiveName,
 	}, nil
 }
 

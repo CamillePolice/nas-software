@@ -30,7 +30,7 @@
                     </div>
                     <h2>macOS Version</h2>
                     <p>Download the macOS version of the application</p>
-                    <button class="download-button" @click="downloadArchive(OS.MAX)" :disabled="downloading.source">
+                    <button class="download-button" @click="downloadArchive(OS.MAC)" :disabled="downloading.source">
                         <i class="fas fa-download"></i>
                         <span>{{ downloading.source ? 'Downloading...' : 'Download' }}</span>
                     </button>
@@ -74,26 +74,32 @@ const downloading = ref({
 
 const toast = useToast()
 
+const convertArrayBufferToBytes = (base64String: string): Uint8Array => {
+    const binaryString = window.atob(base64String);
+    return Uint8Array.from(binaryString, char => char.charCodeAt(0));
+};
+
 const downloadArchive = async (targetOS: OS) => {
     downloading.value[targetOS] = true
 
     fileOrganizerService.retrieveOrganizerBinary(targetOS).then(response => {
 
-        const blob = new Blob([response.binary], {
-            type: 'application/octet-stream'
-        })
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
+        const blob = new Blob([convertArrayBufferToBytes(response.binary)], {
+            type: 'application/zip'
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
 
-        link.href = url
-        link.download = response.filename
+        link.href = url;
+        link.download = response.archiveName;
 
-        document.body.appendChild(link)
-        link.click()
-        window.URL.revokeObjectURL(url)
-        document.body.removeChild(link)
+        document.body.appendChild(link);
+        link.click();
 
-        downloading.value[targetOS] = false
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+
+        downloading.value[targetOS] = false;
     }).catch(() => {
         toast.add({
             severity: 'error',
