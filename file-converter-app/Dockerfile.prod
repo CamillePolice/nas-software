@@ -1,0 +1,17 @@
+FROM node:lts
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN pnpm install
+
+# Copy source code
+COPY . .
+
+RUN npm run build
+
+# Build the application
+CMD [ "npm", "run", "start:prod" ]

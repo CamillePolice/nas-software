@@ -10,13 +10,17 @@
     // it's mapped to the actual host machine
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "features": {
-        "ghcr.io/devcontainers/features/node:1": {}
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
+        "ghcr.io/itsmechlark/features/postgresql:1": {}
     },
     "forwardPorts": [
         3000,
         3001,
         4000,
-        5000
+        5000,
+        11542
     ],
     "portsAttributes": {
         "3000": {
@@ -33,6 +37,10 @@
         },
         "5000": {
             "label": "Application",
+            "onAutoForward": "notify"
+        },
+        "11542": {
+            "label": "Database",
             "onAutoForward": "notify"
         }
     },

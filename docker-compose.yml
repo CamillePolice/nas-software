@@ -10,33 +10,49 @@ services:
     environment:
       - GO_ENV=development
 
-  # file-converter:
-  #   build:
-  #     context: ./file-converter
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4000:4000"
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - NODE_ENV=development
+  file-converter:
+    build:
+      context: file-converter
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./file-converter:/app
+    environment:
+      - NODE_ENV=development
 
-  # proxy:
-  #   build:
-  #     context: ./proxy
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - NODE_ENV=development
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./proxy:/app
+    environment:
+      - NODE_ENV=development
 
-  # nas-app:
-  #   build:
-  #     context: ./file-converter-app
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5000:5000"
-  #   volumes:
-  #     - .:/app
+  nas-app:
+    build:
+      context: ./file-converter-app
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./file-converter-app:/app
+
+  nas-database:
+    build: nas-database
+    restart: always
+    environment:
+      - POSTGRES_USER=nas
+      - POSTGRES_PASSWORD=nas
+      - POSTGRES_DB=nas
+    command: postgres -c timezone=Europe/Paris
+    ports:
+      - 11542:5432
+    volumes:
+      - nas-database-data:/var/lib/postgresql/data .
+
+volumes:
+  nas-database-data:
