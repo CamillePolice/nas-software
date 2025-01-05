@@ -14,4 +14,4 @@ RUN pnpm install
 COPY . .
 
 # Build the application
-CMD [ "pnpm", "dev"]
+CMD [ "pnpm", "dev", "--host"]
