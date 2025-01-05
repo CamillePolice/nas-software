@@ -1,0 +1,42 @@
+services:
+  file-organizer:
+    build:
+      context: file-organizer
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./file-organizer:/app
+    environment:
+      - GO_ENV=development
+
+  # file-converter:
+  #   build:
+  #     context: ./file-converter
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:4000"
+  #   volumes:
+  #     - .:/app
+  #   environment:
+  #     - NODE_ENV=development
+
+  # proxy:
+  #   build:
+  #     context: ./proxy
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - .:/app
+  #   environment:
+  #     - NODE_ENV=development
+
+  # nas-app:
+  #   build:
+  #     context: ./file-converter-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - .:/app
