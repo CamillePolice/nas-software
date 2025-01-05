@@ -28,7 +28,7 @@
             "onAutoForward": "notify"
         },
         "3001": {
-            "label": "Proxy",
+            "label": "Database Manager",
             "onAutoForward": "notify"
         },
         "4000": {

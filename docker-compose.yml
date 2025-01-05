@@ -21,14 +21,14 @@ services:
     environment:
       - NODE_ENV=development
 
-  proxy:
+  database-manager:
     build:
-      context: ./proxy
+      context: ./database-manager
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ./proxy:/app
+      - ./database-manager:/app
     environment:
       - NODE_ENV=development
 
