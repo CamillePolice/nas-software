@@ -66,7 +66,7 @@
             "detail": "Runs the Vite development server",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -76,7 +76,7 @@
             "detail": "Runs type-check, then builds the project using Vite",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -86,7 +86,7 @@
             "detail": "Previews the production build using Vite",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -96,7 +96,7 @@
             "detail": "Builds the project using Vite without type-check",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -106,7 +106,7 @@
             "detail": "Performs TypeScript type-checking using vue-tsc",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -116,7 +116,7 @@
             "detail": "Lints the codebase with ESLint and fixes issues where possible",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         },
         {
@@ -126,7 +126,7 @@
             "detail": "Formats code using Prettier",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/file-converter-app"
+                "cwd": "${workspaceFolder}/nas-app"
             }
         }
     ]

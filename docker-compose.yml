@@ -34,12 +34,12 @@ services:
 
   nas-app:
     build:
-      context: ./file-converter-app
+      context: ./nas-app
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
     volumes:
-      - ./file-converter-app:/app
+      - ./nas-app:/app
 
   nas-database:
     build: nas-database

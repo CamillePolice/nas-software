@@ -16,21 +16,21 @@
             "request": "launch",
             "name": "Debug front [chrome]",
             "url": "http://localhost:5000",
-            "webRoot": "${workspaceFolder}/file-converter-app"
+            "webRoot": "${workspaceFolder}/nas-app"
         },
         {
             "type": "msedge",
             "request": "launch",
             "name": "Debug front [Edge]",
             "url": "http://localhost:5000",
-            "webRoot": "${workspaceFolder}/file-converter-app"
+            "webRoot": "${workspaceFolder}/nas-app"
         },
         {
             "type": "firefox",
             "request": "launch",
             "name": "Debug front [Firefox]",
             "url": "http://localhost:5000",
-            "webRoot": "${workspaceFolder}/file-converter-appopvigil-frontend"
+            "webRoot": "${workspaceFolder}/nas-appopvigil-frontend"
         }
     ]
 }
