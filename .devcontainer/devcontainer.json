@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/go-postgres
 {
-    "name": "File Converter",
+    "name": "Nas Software",
     "build": {
         "context": "..",
         "dockerfile": "Dockerfile"
@@ -14,12 +14,17 @@
     },
     "forwardPorts": [
         3000,
+        3001,
         4000,
         5000
     ],
     "portsAttributes": {
         "3000": {
             "label": "File organizer",
+            "onAutoForward": "notify"
+        },
+        "3001": {
+            "label": "Proxy",
             "onAutoForward": "notify"
         },
         "4000": {

@@ -1,0 +1,87 @@
+# Compiled output
+dist
+node_modules
+build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Tests
+/coverage
+/.nyc_output
+test-report.xml
+jest-report
+test-results.xml
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+.env.staging
+
+# Package manager
+yarn.lock
+package-lock.json
+npm-shrinkwrap.json
+.pnpm-lock.yaml
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Temporary files
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Upload directories
+/uploads
+/temp
+/tmp
+
+# Local development
+docker-compose.override.yml
+.docker
+.dockerignore

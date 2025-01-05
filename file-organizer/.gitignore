@@ -27,3 +27,4 @@ go.work.sum
 test-folder/*
 tmp/
 src/tmp/
+src/cmd/bin/
